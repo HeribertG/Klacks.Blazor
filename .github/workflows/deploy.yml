@@ -20,7 +20,7 @@
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: ${{ secrets.SSH_PORT }} # Optional, default is 22
+            port: ${{ secrets.SSH_PORT }}
             script: |
               set -e
               echo "🚀 Deploying Klacks.Blazor..."
@@ -52,10 +52,8 @@
               echo "🏥 Checking service status..."
               docker compose ps klacks-blazor
 
-        - name: Health Check
-          run: |
-            sleep 15
-            ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+              # Health Check direkt hier ausführen
+              sleep 15
               echo "🏥 Health Check for Klacks.Blazor..."
 
               if curl -f -s http://localhost:7002 > /dev/null; then
@@ -64,5 +62,4 @@
                 echo "❌ Klacks.Blazor health check failed"
                 docker compose logs klacks-blazor --tail=10
               fi
-            EOF
 
