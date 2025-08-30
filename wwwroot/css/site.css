@@ -1,8 +1,27 @@
-/* Password Reset Blazor Styles */
+:root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --accent-primary: #9b59b6;
+    --accent-secondary: #8e44ad;
+    --accent-gradient: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    --border-color: #404040;
+    --border-focus: #9b59b6;
+    --danger: #e74c3c;
+    --success: #27ae60;
+    --warning: #f39c12;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
 
 .password-reset-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,9 +29,10 @@
 }
 
 .password-reset-card {
-    background: white;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     max-width: 450px;
     width: 100%;
     padding: 40px;
@@ -21,18 +41,19 @@
 
 .password-reset-logo {
     font-size: 3rem;
-    color: #667eea;
+    color: var(--accent-primary);
     margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
 }
 
 .password-reset-title {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 10px;
     font-weight: 600;
 }
 
 .password-reset-subtitle {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 30px;
 }
 
@@ -43,26 +64,36 @@
 
 .form-label {
     font-weight: 500;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 8px;
     display: block;
 }
 
 .form-control {
-    border: 2px solid #e0e6ed;
+    background-color: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 12px 16px;
     font-size: 16px;
+    color: var(--text-primary);
     transition: all 0.3s ease;
 }
 
 .form-control:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    background-color: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--accent-gradient);
     border: none;
     border-radius: 8px;
     padding: 12px 30px;
@@ -70,17 +101,20 @@
     font-size: 16px;
     width: 100%;
     transition: all 0.3s ease;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+    background: linear-gradient(135deg, #a569bd 0%, #9b59b6 100%);
 }
 
 .btn-secondary {
-    background: #f8f9fa;
-    border: 2px solid #e0e6ed;
-    color: #666;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
     border-radius: 8px;
     padding: 12px 30px;
     font-weight: 500;
@@ -90,9 +124,10 @@
 }
 
 .btn-secondary:hover {
-    background: #e9ecef;
-    border-color: #adb5bd;
-    color: #495057;
+    background: #404040;
+    border-color: #505050;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
 .alert {
@@ -103,75 +138,126 @@
 }
 
 .alert-success {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-    color: #155724;
+    background: rgba(39, 174, 96, 0.2);
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.3);
 }
 
 .alert-danger {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    color: #721c24;
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
 }
 
 .alert-warning {
-    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-    color: #856404;
+    background: rgba(243, 156, 18, 0.2);
+    color: #f39c12;
+    border: 1px solid rgba(243, 156, 18, 0.3);
 }
 
 .spinner-border-sm {
     width: 1rem;
     height: 1rem;
+    border-color: var(--accent-primary);
+    border-right-color: transparent;
 }
 
 .loading-text {
     margin-left: 10px;
+    color: var(--text-primary);
 }
 
-/* Expired page specific styles */
 .expired-icon {
     font-size: 4rem;
-    color: #dc3545;
+    color: var(--danger);
     margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
 }
 
 .expired-card {
-    background: white;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     max-width: 450px;
     width: 100%;
     padding: 40px;
     text-align: center;
-    border-top: 4px solid #dc3545;
+    border-top: 4px solid var(--danger);
 }
 
-/* Validation errors */
 .validation-message {
-    color: #dc3545;
+    color: var(--danger);
     font-size: 0.875rem;
     margin-top: 5px;
     display: block;
 }
 
 .is-invalid {
-    border-color: #dc3545;
+    border-color: var(--danger) !important;
 }
 
 .is-invalid:focus {
-    border-color: #dc3545;
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    border-color: var(--danger);
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
 }
 
-/* Password Generator Features */
-.input-group .btn {
-    border-left: none;
+.input-group {
+    background-color: var(--bg-tertiary);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.input-group .btn:not(:last-child) {
+.input-group .form-control {
     border-right: none;
 }
 
+.input-group .btn {
+    background-color: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    border-left: none;
+}
+
 .input-group .btn:hover {
+    background-color: #404040;
     z-index: 2;
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    border: 2px solid var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.btn-outline-success {
+    background-color: transparent;
+    border: 2px solid var(--success);
+    color: var(--success);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--success);
+    border-color: var(--success);
+    color: white;
 }
 
 .password-strength {
@@ -181,10 +267,11 @@
 .password-strength-bar {
     width: 100%;
     height: 8px;
-    background-color: #e9ecef;
+    background-color: var(--bg-tertiary);
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 5px;
+    border: 1px solid var(--border-color);
 }
 
 .password-strength-fill {
@@ -194,66 +281,62 @@
 }
 
 .strength-too-weak {
-    background-color: #dc3545;
+    background-color: #c0392b;
 }
 
 .strength-very-weak {
-    background-color: #fd7e14;
+    background-color: #e74c3c;
 }
 
 .strength-weak {
-    background-color: #ffc107;
+    background-color: #f39c12;
 }
 
 .strength-fair {
-    background-color: #20c997;
+    background-color: #f1c40f;
 }
 
 .strength-strong {
-    background-color: #28a745;
+    background-color: #27ae60;
 }
 
 .strength-very-strong {
-    background-color: #198754;
+    background-color: #2ecc71;
 }
 
-/* Input group button improvements */
-.btn-outline-secondary:hover {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: white;
-}
-
-.btn-outline-primary:hover {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    color: white;
-}
-
-.btn-outline-success:hover {
-    background-color: #198754;
-    border-color: #198754;
-    color: white;
-}
-
-/* Button tooltips */
 .btn[title] {
     position: relative;
 }
 
-/* Password field improvements */
 .form-control[type="password"],
 .form-control[type="text"] {
     font-family: 'Courier New', monospace;
+    letter-spacing: 0.1em;
 }
 
-/* Loading state for buttons */
 .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-/* Responsive */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+}
+
+p {
+    color: var(--text-secondary);
+}
+
+a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-secondary);
+    text-decoration: underline;
+}
+
 @media (max-width: 576px) {
     .password-reset-card, .expired-card {
         padding: 30px 20px;
@@ -280,27 +363,28 @@
     
     .input-group .btn {
         border-radius: 0;
-        border-right: 2px solid #e0e6ed;
+        border-right: 2px solid var(--border-color);
         flex: 1;
     }
     
     .input-group .btn:last-child {
         border-radius: 0 0 8px 8px;
-        border-right: 2px solid #e0e6ed;
+        border-right: 2px solid var(--border-color);
     }
 }
 
-/* Blazor error UI */
 #blazor-error-ui {
-    background: lightyellow;
+    background: var(--bg-secondary);
+    border-top: 2px solid var(--danger);
     bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.5);
     display: none;
     left: 0;
     padding: 0.6rem 1.25rem 0.7rem 1.25rem;
     position: fixed;
     width: 100%;
     z-index: 1000;
+    color: var(--text-primary);
 }
 
 #blazor-error-ui .dismiss {
@@ -308,4 +392,44 @@
     position: absolute;
     right: 0.75rem;
     top: 0.5rem;
+    color: var(--text-secondary);
+}
+
+#blazor-error-ui .dismiss:hover {
+    color: var(--text-primary);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--bg-tertiary) inset !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+::selection {
+    background: var(--accent-primary);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--accent-primary);
+    color: white;
 }
