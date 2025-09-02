@@ -9,6 +9,10 @@ on:
       - '!README.md'
       - '!docs/**'
 
+concurrency:
+  group: deploy-klacks-blazor-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
