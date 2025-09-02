@@ -1,0 +1,65 @@
+
+  # .github/workflows/deploy.yml for Klacks.Blazor
+
+  name: Deploy Klacks.Blazor to Production
+
+  on:
+    push:
+      branches:
+        - main
+        - master
+
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Deploy to server
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: ${{ secrets.SSH_PORT }}
+            script: |
+              set -e
+              echo "🚀 Deploying Klacks.Blazor..."
+
+              echo "Navigating to application directory..."
+              cd /root/apps
+
+              echo "📦 Updating Klacks.Blazor source code..."
+              if [ -d "Klacks.Blazor" ]; then
+                echo "Updating existing Klacks.Blazor..."
+                cd Klacks.Blazor
+                git config pull.rebase false
+                git pull
+                cd ..
+              else
+                echo "Cloning Klacks.Blazor..."
+                git clone https://github.com/HeribertG/Klacks.Blazor.git
+              fi
+
+              echo "🔨 Rebuilding the klacks-blazor Docker image..."
+              timeout 900 docker compose build klacks-blazor --no-cache
+
+              echo "🔄 Restarting the klacks-blazor service..."
+              docker compose up -d klacks-blazor
+
+              echo "✅ Klacks.Blazor deployment successful!"
+
+              # Status prüfen
+              echo "🏥 Checking service status..."
+              docker compose ps klacks-blazor
+
+              # Health Check direkt hier ausführen
+              sleep 15
+              echo "🏥 Health Check for Klacks.Blazor..."
+
+              if curl -f -s http://localhost:7002 > /dev/null; then
+                echo "✅ Klacks.Blazor is healthy and responding on port 7002"
+              else
+                echo "❌ Klacks.Blazor health check failed"
+                docker compose logs klacks-blazor --tail=10
+              fi
+

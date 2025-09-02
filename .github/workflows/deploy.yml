@@ -1,65 +1,87 @@
+# .github/workflows/deploy.yml für Klacks.Blazor
+name: Deploy Klacks.Blazor to Hetzner
 
-  # .github/workflows/deploy.yml for Klacks.Blazor
+on:
+  push:
+    branches: [ main, master ]
 
-  name: Deploy Klacks.Blazor to Production
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-  on:
-    push:
-      branches:
-        - main
-        - master
-
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
-
-      steps:
-        - name: Deploy to server
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: ${{ secrets.SSH_PORT }}
-            script: |
-              set -e
-              echo "🚀 Deploying Klacks.Blazor..."
-
-              echo "Navigating to application directory..."
-              cd /root/apps
-
-              echo "📦 Updating Klacks.Blazor source code..."
-              if [ -d "Klacks.Blazor" ]; then
-                echo "Updating existing Klacks.Blazor..."
-                cd Klacks.Blazor
-                git config pull.rebase false
-                git pull
-                cd ..
-              else
-                echo "Cloning Klacks.Blazor..."
-                git clone https://github.com/HeribertG/Klacks.Blazor.git
-              fi
-
-              echo "🔨 Rebuilding the klacks-blazor Docker image..."
-              timeout 900 docker compose build klacks-blazor --no-cache
-
-              echo "🔄 Restarting the klacks-blazor service..."
-              docker compose up -d klacks-blazor
-
-              echo "✅ Klacks.Blazor deployment successful!"
-
-              # Status prüfen
-              echo "🏥 Checking service status..."
-              docker compose ps klacks-blazor
-
-              # Health Check direkt hier ausführen
-              sleep 15
-              echo "🏥 Health Check for Klacks.Blazor..."
-
-              if curl -f -s http://localhost:7002 > /dev/null; then
-                echo "✅ Klacks.Blazor is healthy and responding on port 7002"
-              else
-                echo "❌ Klacks.Blazor health check failed"
-                docker compose logs klacks-blazor --tail=10
-              fi
-
+    - name: Deploy to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT || 22 }}
+        script: |
+          set -e
+          echo "🚀 Deploying Klacks.Blazor..."
+          
+          # Navigate to correct directory
+          cd /root/apps
+          
+          # Update Klacks.Blazor Repository
+          if [ -d "Klacks.Blazor" ]; then
+            echo "📦 Updating Klacks.Blazor..."
+            cd Klacks.Blazor
+            # Get current branch name
+            CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            echo "Current branch: $CURRENT_BRANCH"
+            git fetch origin
+            git pull origin $CURRENT_BRANCH
+            cd ..
+          else
+            echo "📦 Cloning Klacks.Blazor..."
+            git clone https://github.com/HeribertG/Klacks.Blazor.git
+          fi
+          
+          # Check Docker Compose version
+          if command -v docker-compose &> /dev/null; then
+            COMPOSE_CMD="docker-compose"
+          else
+            COMPOSE_CMD="docker compose"
+          fi
+          echo "Using: $COMPOSE_CMD"
+          
+          # Rebuild and restart only Blazor service
+          echo "🔨 Building Klacks.Blazor..."
+          timeout 900 $COMPOSE_CMD build klacks-blazor --no-cache
+          
+          echo "🔄 Restarting Klacks.Blazor..."
+          $COMPOSE_CMD up -d klacks-blazor
+          
+          echo "✅ Klacks.Blazor deployment completed!"
+          
+          # Status check
+          echo "📊 Service status:"
+          $COMPOSE_CMD ps klacks-blazor
+          
+          # Health Check
+          sleep 15
+          echo "🏥 Health Check for Klacks.Blazor..."
+          
+          # Check if service is running
+          if $COMPOSE_CMD ps klacks-blazor | grep -q "Up"; then
+            echo "✅ Container is running"
+          else
+            echo "❌ Container is not running"
+            $COMPOSE_CMD logs klacks-blazor --tail=20
+            exit 1
+          fi
+          
+          # Check HTTP response
+          if curl -f -s -o /dev/null -w "%{http_code}" http://localhost:7002 | grep -q "200\|301\|302"; then
+            echo "✅ Klacks.Blazor is accessible on port 7002"
+          else
+            echo "❌ Klacks.Blazor health check failed"
+            echo "Container logs:"
+            $COMPOSE_CMD logs klacks-blazor --tail=20
+            exit 1
+          fi
