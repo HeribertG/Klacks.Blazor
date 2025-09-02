@@ -4,6 +4,10 @@ name: Deploy Klacks.Blazor to Hetzner
 on:
   push:
     branches: [ main ]
+    paths:
+      - '**'
+      - '!README.md'
+      - '!docs/**'
 
 jobs:
   deploy:
