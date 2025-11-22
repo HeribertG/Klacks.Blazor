@@ -26,7 +26,7 @@ Klacks.Blazor/
 
 ### Prerequisites
 
-- .NET 9.0 SDK
+- .NET 10.0 SDK
 - Running Klacks.Api instance (https://localhost:5001)
 
 ### Running the Application
@@ -90,7 +90,7 @@ This application requires the following Klacks.Api endpoints:
 
 ## Tech Stack
 
-- **Framework:** Blazor Server (.NET 9.0)
+- **Framework:** Blazor Server (.NET 10.0)
 - **UI:** Bootstrap 5 + Font Awesome
 - **HTTP:** HttpClient with typed services
 - **Validation:** Data Annotations + FluentValidation
