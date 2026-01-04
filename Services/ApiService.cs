@@ -25,7 +25,7 @@ public class ApiService : IApiService
             var json = JsonSerializer.Serialize(request, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PostAsync("/api/v1/backend/accounts/ResetPassword", content);
+            var response = await _httpClient.PostAsync("/api/backend/accounts/ResetPassword", content);
             
             if (response.IsSuccessStatusCode)
             {
@@ -47,7 +47,7 @@ public class ApiService : IApiService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/v1/backend/accounts/ValidatePasswordResetToken?token={token}");
+            var response = await _httpClient.GetAsync($"/api/backend/accounts/ValidatePasswordResetToken?token={token}");
             
             if (response.IsSuccessStatusCode)
             {
