@@ -1,5 +1,5 @@
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:10.0.5 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet publish -c Release -o /app/publish
 
 # Runtime stage — pinned version to prevent breaking changes from base image updates
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.5-noble
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
